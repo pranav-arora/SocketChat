@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script>
+        window.addEventListener("load",function(){
+            message=[];
+            var socket=io.connect('http://192.168.0.105:9000');
+            var field = document.getElementById("field");
+    var sendButton = document.getElementById("send");
+    var content = document.getElementById("content");
+            socket.on('message',function(data){
+                console.log("message index"+data.message);
+                message.push(data.message);
+                var inhtml='';
+            for(var i=0;i<message.length;i++){
+                inhtml=inhtml+message[i]+'<br />'
+            }
+            content.innerHTML=inhtml;
+            });
+            sendButton.onclick=function(){
+               
+                var typed=field.value;
+                socket.emit('send',{message:typed});
+                 console.log("here");
+            }
+            
+        });
+        
+    </script>
+</head>
+<body>
+    	<input type="text" id="field" placeholder="Type Message to send...">
+	<button id="send">Send</button>
+	<div id="content"></div>
+</body>
+</html>
